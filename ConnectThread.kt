@@ -28,13 +28,16 @@ class ConnectThread(private var device: BluetoothDevice, private val listener: R
     override fun run() {
         try {
             Log.d("MyLog", "Connecting...")
+            listener.onReceive("Connecting...")
             mSocket?.connect()
             Log.d("MyLog", "Connected")
+            listener.onReceive("Connected")
             rThread = RecevieThread(mSocket!!, listener)
             rThread.start()
 
         } catch (i: IOException) {
             Log.d("MyLog", "Can not connect to device")
+            listener.onReceive("Can not connect to device")
             closeConnection()
 
         }

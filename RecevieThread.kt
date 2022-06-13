@@ -52,6 +52,7 @@ class RecevieThread(val bSocket: BluetoothSocket, val listener: Listener) : Thre
     }
 
     interface Listener{
+
         fun onReceive(message:String)
     }
 

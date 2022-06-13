@@ -19,7 +19,6 @@ class BtConnection(private val adapter: BluetoothAdapter, private val listener: 
 
     fun sendMessage(message: String){
         cThread.rThread.sendMessage(message.toByteArray())
-
     }
 
 

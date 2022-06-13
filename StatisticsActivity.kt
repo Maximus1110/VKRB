@@ -14,10 +14,12 @@ import java.security.KeyStore
 class StatisticsActivity : AppCompatActivity() {
 
     private lateinit var lineChart: LineChart
+    var dist=1f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_statistics)
+        dist=intent.getFloatExtra("DIST",0f)
         init()
     }
 
@@ -28,19 +30,24 @@ class StatisticsActivity : AppCompatActivity() {
 
     fun setLineChartData(){
         val xValue = ArrayList<String>()
-        xValue.add("11.00AM")
-        xValue.add("12.00AM")
-        xValue.add("13.00AM")
-        xValue.add("14.00AM")
-        xValue.add("15.00AM")
+        xValue.add("10.06")
+        xValue.add("11.06")
+        xValue.add("12.06")
+        xValue.add("13.06")
+        xValue.add("14.06")
+        xValue.add("15.06")
+        xValue.add("16.06")
+
 
 
         val lineEntry = ArrayList<Entry>();
-        lineEntry.add(Entry(40f,0))
-        lineEntry.add(Entry(30f,1))
-        lineEntry.add(Entry(35f,2))
-        lineEntry.add(Entry(25f,3))
-        lineEntry.add(Entry(30f,4))
+        lineEntry.add(Entry(4f,0))
+        lineEntry.add(Entry(12.2f,1))
+        lineEntry.add(Entry(11.8f,2))
+        lineEntry.add(Entry(0f,3))
+        lineEntry.add(Entry(9.3f,4))
+        lineEntry.add(Entry(0f,5))
+        lineEntry.add(Entry(dist,6))
 
         val lineDataSet= LineDataSet(lineEntry,"First")
         lineDataSet.color=resources.getColor(R.color.purple_500)
