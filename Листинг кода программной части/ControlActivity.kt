@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Binder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,7 +28,8 @@ class ControlActivity : AppCompatActivity(), RecevieThread.Listener {
     var REQUEST_CODE_ENABLE_BLUETOOTH = 10
     private var buff = ""
     private var gl_dist=0f
-
+    var pref : SharedPreferences?=null
+    var flag=true
     private var listItem: ListItem? = null
 
     @SuppressLint("MissingPermission")
@@ -42,11 +44,14 @@ class ControlActivity : AppCompatActivity(), RecevieThread.Listener {
 
 
     private fun init() {
+        pref=getSharedPreferences("TABLE_DATE", Context.MODE_PRIVATE)
+        gl_dist=pref?.getFloat("gl_dist",2f)!!
         val btManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val btAdapter = btManager.adapter
         btConnection = BtConnection(btAdapter, this)
         btAdapterDef = BluetoothAdapter.getDefaultAdapter()
         binding.bA.setOnClickListener { connect_click() }
+
 
     }
 
@@ -179,7 +184,14 @@ class ControlActivity : AppCompatActivity(), RecevieThread.Listener {
                         if (sp_str == "0.0") {
                             set_visible(true, false)
                             binding.textVMainLabel.setText("Не двигаемся")
+                            if(flag){
+                                saveDataFloat(gl_dist,"gl_dist")
+                                flag=false
+
+                            }
+
                         } else {
+                            flag=true
                             set_visible(false, false)
                             binding.texVSpeed.setText((sp_int / 10).toString() + "." + (sp_int % 10).toString() + " км/ч")
                             binding.textVDist.setText(dis_str+" км")
@@ -192,6 +204,23 @@ class ControlActivity : AppCompatActivity(), RecevieThread.Listener {
 
 
         }
+
+    }
+
+    fun saveDataFloat(res: Float, label:String){
+        val editor = pref?.edit()
+        editor?.putFloat(label,res)
+        editor?.apply()
+    }
+
+
+
+    override fun onDestroy() {
+
+        super.onDestroy()
+        saveDataFloat(gl_dist,"gl_dist")
+        Toast.makeText(this,"Сохранили расстояние",Toast.LENGTH_SHORT).show()
+
 
     }
 
